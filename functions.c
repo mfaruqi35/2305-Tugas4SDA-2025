@@ -287,7 +287,7 @@ void handleNumericSorting(){
 
   clock_t end = clock();
   double duration = (double)(end - start) / CLOCKS_PER_SEC;
-  printArray(data, count);
+  // printArray(data, count);
   printf("Total data yang disorting: %d\n", count);
   printf("Waktu eksekusi: %.6f detik\n", duration);
   printMemoryUsage();
@@ -445,6 +445,23 @@ void quickSortString(char** arr, int low, int high) {
     }
 }
 
+// Shell sort String
+void shellSortString(char** arr, int n){
+   // Atur interval secara bertahap: n/2, n/4, ..., 1
+   for (int interval = n / 2; interval > 0; interval /= 2) {
+    for (int i = interval; i < n; i++) {
+        char* temp = arr[i];
+        int j = i;
+
+        while (j >= interval && strcmp(arr[j - interval], temp) > 0) {
+            arr[j] = arr[j - interval];
+            j -= interval;
+        }
+        arr[j] = temp;
+    }
+}
+}
+
 void handleStringSorting(){
     char** data = malloc(sizeof(char*) * MAXSIZE);
     if(data == NULL){
@@ -474,7 +491,7 @@ void handleStringSorting(){
     }
 
     printf("\nPilih metode Sorting\n");
-    printf("(1) Bubble Sort\n(2) Selection Sort\n(3) Insertion Sort\n(4) Merge Sort\n(5)Quick Sort\n");
+    printf("(1) Bubble Sort\n(2) Selection Sort\n(3) Insertion Sort\n(4) Merge Sort\n(5) Quick Sort\n(6) Shell Sort\n");
     int method;
     printf("Pilihan: ");
     scanf("%d", &method);
@@ -488,6 +505,7 @@ void handleStringSorting(){
         case 3: insertionSortString(data, count); break;
         case 4: mergeSortString(data, 0, count - 1); break;
         case 5: quickSortString(data, 0, count - 1); break;
+        case 6: shellSortString(data, count); break;
         default:
             printf("Metode tidak valid\n");
             return;
@@ -497,7 +515,7 @@ void handleStringSorting(){
     double durasi = (double)(end - start) / CLOCKS_PER_SEC;
 
     printf("\nHasil sorting (10 pertama):\n");
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < 10; i++) {
         printf("%s\n", data[i]);
     }
     printf("Total data yang disorting: %d\n", count);
