@@ -2,10 +2,10 @@
 #include <time.h> 
 
 int main(){
+    printf("============ SELAMAT DATANG ===========\n");
     int choice;
     while(1){
-    printf("============ SELAMAT DATANG ===========\n");
-    printf("Apa yang ingin kamu lakukan\n");
+    printf("Apa yang ingin kamu lakukan?:\n");
     printf("(1) Urutkan angka\n");
     printf("(2) Urutkan kata\n");
     printf("(3) Keluar\n");

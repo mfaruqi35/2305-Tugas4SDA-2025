@@ -209,14 +209,6 @@ void shellSort(int array[], int n) {
   }
 }
 
-// Print Array
-void printArray(int array[], int size) {
-  for (int i = 0; i < size; i++) {
-    printf("%d\n ", array[i]);
-  }
-  printf("\n");
-}
-
 // Print Memory Usage
 void printMemoryUsage() {
   PROCESS_MEMORY_COUNTERS memInfo;
@@ -266,7 +258,13 @@ void handleNumericSorting(){
 
   clock_t end = clock();
   double duration = (double)(end - start) / CLOCKS_PER_SEC;
-  printArray(data, count);
+
+  // Print 10 data pertama
+  // printf("Hasil sorting (10 pertama):\n");
+  // for (int i = 0; i < 10; i++) {
+  //   printf("%d\n", data[i]);
+  // }
+  // printf("\n");
   printf("Total data yang disorting: %d\n", count);
   printf("Waktu eksekusi: %.6f detik\n", duration);
   printMemoryUsage();
@@ -296,7 +294,6 @@ int readWordFromFile(const char* filename, char** data, int maxsize, int rows){
     fclose(file);
     return count;
 }
-
 
 void bubbleSortString(char** arr, int n){
     for (int i = 0; i < n-1; i++)
@@ -460,12 +457,12 @@ void handleStringSorting(){
 
     clock_t end = clock();
     double durasi = (double)(end - start) / CLOCKS_PER_SEC;
-    int j = 1;
-    printf("\nHasil sorting (10 pertama):\n");
-    for (int i = 0; i < 10; i++) {
-        printf("%s\n", data[i]);
-        j++;
-    }
+    // int j = 1;
+    // printf("\nHasil sorting (10 pertama):\n");
+    // for (int i = 0; i < 10; i++) {
+    //     printf("%s\n", data[i]);
+    //     j++;
+    // }
     printf("Total data yang disorting: %d\n", count);
     printf("Waktu eksekusi: %.6f detik\n", durasi);
     printMemoryUsage();
