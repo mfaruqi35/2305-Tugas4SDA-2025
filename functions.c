@@ -3,34 +3,15 @@
 #define MAXSIZE 2000000
 
 /* NUMERIC SORTING */
-
-// Generate Random Numbers
-void generate_random_numbers(const char *filename, int count, int max_value){
-    FILE *fp = fopen(filename, "w");
-    if(!fp){
-        perror("file tidak ditemukan");
-        return;
-    }
-
-    srand(time(NULL)); //Inisialisasi seed
-
-    for (int i = 0; i< count; i++){
-        int num = rand() % max_value;
-        fprintf(fp, "%d\n", num);
-    }
-
-    fclose(fp);
-}
-
 // Read Data From File
-int readNumFromFile(const char *filename, int* data, int maxsize){
+int readNumFromFile(const char *filename, int* data, int maxsize, int rows){
   FILE *file = fopen(filename, "r");
   if (file == NULL){
     printf("file tidak ditemukan: %s\n", filename);
     return -1;
   }
   int count = 0;
-  while(fscanf(file, "%d", &data[count]) != EOF && count < maxsize){
+  while(fscanf(file, "%d", &data[count]) != EOF && count < maxsize && count < rows){
     count++;
   }
   fclose(file);
@@ -231,7 +212,7 @@ void shellSort(int array[], int n) {
 // Print Array
 void printArray(int array[], int size) {
   for (int i = 0; i < size; i++) {
-    printf("%d ", array[i]);
+    printf("%d\n ", array[i]);
   }
   printf("\n");
 }
@@ -251,8 +232,6 @@ void handleNumericSorting(){
   printf("\nMasukkan jumlah baris data angka: ");
   scanf("%d", &rows);
 
-  generate_random_numbers("data_angka.txt", rows, MAXSIZE);
-
   printf("\nPilih metode sorting:\n");
   printf("(1) Bubble Sort\n(2) Selection Sort\n(3) Insertion Sort\n(4) Merge Sort\n(5) Quick Sort\n(6) Shell Sort\n");
   int method;
@@ -265,7 +244,7 @@ void handleNumericSorting(){
     return;
   }
 
-  int count = readNumFromFile("data_angka.txt", data, MAXSIZE);
+  int count = readNumFromFile("data_angka.txt", data, MAXSIZE, rows);
   if(count == -1){
     free(data);
     return;
@@ -287,7 +266,7 @@ void handleNumericSorting(){
 
   clock_t end = clock();
   double duration = (double)(end - start) / CLOCKS_PER_SEC;
-  // printArray(data, count);
+  printArray(data, count);
   printf("Total data yang disorting: %d\n", count);
   printf("Waktu eksekusi: %.6f detik\n", duration);
   printMemoryUsage();
@@ -295,37 +274,8 @@ void handleNumericSorting(){
 }
 
 /* WORDS SORTING */
-void random_word(char *word, int length) {
-    static const char charset[] = "abcdefghijklmnopqrstuvwxyz"; 
-    for (int i = 0; i < length; i++) {
-        int key = rand() % (int)(sizeof(charset) - 1);
-        word[i] = charset[key];
-    }
-    word[length] = '\0';
-}
-
-// Generate Randow Words
-void generate_random_words(const char *filename, int count, int max_word_length) {
-    FILE *fp = fopen(filename, "w");
-    if (!fp) {
-        perror("File tidak dapat dibuka");
-        return;
-    }
-
-    srand(time(NULL));
-
-    char word[100]; 
-    for (int i = 0; i < count; i++) {
-        int length = (rand() % (max_word_length - 3)) + 3; // panjang kata minimal 3
-        random_word(word, length);
-        fprintf(fp, "%s\n", word);
-    }
-
-    fclose(fp);
-}
-
 // Read Word from Text File
-int readWordFromFile(const char* filename, char** data, int maxsize){
+int readWordFromFile(const char* filename, char** data, int maxsize, int rows){
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
         printf("File tidak ditemukan: %s\n", filename);
@@ -335,7 +285,7 @@ int readWordFromFile(const char* filename, char** data, int maxsize){
     int count = 0;
     char buffer[100];
 
-    while (fgets(buffer, sizeof(buffer), file) != NULL && count < maxsize) {
+    while (fgets(buffer, sizeof(buffer), file) != NULL && count < maxsize && count < rows) {
         buffer[strcspn(buffer, "\n")] = 0; // hapus newline
         data[count] = malloc(strlen(buffer) + 1);
         if (data[count] != NULL)
@@ -481,10 +431,7 @@ void handleStringSorting(){
     while (getchar() != '\n'); // flush sisa input
     printf("Rows: %d\n", rows);
 
-    generate_random_words("data_kata.txt", rows, 20);
-    printf("Generate random words done\n");
-
-    int count = readWordFromFile("data_kata.txt", data, MAXSIZE);
+    int count = readWordFromFile("data_kata.txt", data, MAXSIZE, rows);
     if (count == -1){
       free(data);
       return;
@@ -513,10 +460,11 @@ void handleStringSorting(){
 
     clock_t end = clock();
     double durasi = (double)(end - start) / CLOCKS_PER_SEC;
-
+    int j = 1;
     printf("\nHasil sorting (10 pertama):\n");
     for (int i = 0; i < 10; i++) {
         printf("%s\n", data[i]);
+        j++;
     }
     printf("Total data yang disorting: %d\n", count);
     printf("Waktu eksekusi: %.6f detik\n", durasi);

@@ -9,16 +9,9 @@
 
 #define MAXSIZE 2000000
 
-// Generate Random Numbers
-void generate_random_numbers(const char *filename, int count, int max_value);
-
-// Generate Random Words
-void random_word(char *word, int length);
-void generate_random_words(const char *filename, int count, int max_word_length);
-
 // Read Data From File
-int readNumFromFile(const char *filename, int* data, int maxsize);
-int readWordFromFile(const char* filename, char** data, int maxsize);
+int readNumFromFile(const char *filename, int* data, int maxsize, int rows);
+int readWordFromFile(const char* filename, char** data, int maxsize, int rows);
 
 // Declare sorting functions
 
