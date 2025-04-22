@@ -16,7 +16,7 @@ int main(){
             handleNumericSorting();
         }
         else if(choice == 2){
-            printf("Belum tersedia\n");
+            handleStringSorting();
         }
         else if(choice == 3){
             printf("Terima kasih sudah menggunakan program ini\n");
@@ -26,40 +26,6 @@ int main(){
             printf("Input invalid\n");
         }
     }
-
-    // int* data = malloc(sizeof(int) * MAXSIZE);
-    // if (data == NULL){
-    //     printf("Memory allocation failed\n");
-    //     return 1;
-    // }
-
-    // FILE* file = fopen("data_angka.txt", "r");
-    // if (file == NULL){
-    //     printf("File tidak ditemukan\n");
-    //     return 1;
-    // }
-
-    // int count = 0;
-    // while(fscanf(file, "%d", &data[count]) != EOF && count < MAXSIZE){
-    //     count++;
-    // }
-    // fclose(file);
-
-    // clock_t start = clock();
-
-    // // bubbleSort(data, count);
-    // // selectionSort(data, count);
-    // // insertionSort(data, count);
-
-    // clock_t end = clock();
-    // double time_taken = (double)(end - start) / CLOCKS_PER_SEC;
-
-    // printArray(data, count);
-    // printf("Total data dibaca: %d\n", count);
-    // printf("Waktu eksekusi: %.6f detik\n", time_taken);
-    // printMemoryUsage();
-    
-    // free(data);
 
     return 0;
 }

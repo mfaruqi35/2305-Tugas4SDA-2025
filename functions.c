@@ -2,6 +2,8 @@
 
 #define MAXSIZE 2000000
 
+/* NUMERIC SORTING */
+
 // Generate Random Numbers
 void generate_random_numbers(const char *filename, int count, int max_value){
     FILE *fp = fopen(filename, "w");
@@ -21,7 +23,7 @@ void generate_random_numbers(const char *filename, int count, int max_value){
 }
 
 // Read Data From File
-int readDataFromFile(const char *filename, int* data, int maxsize){
+int readNumFromFile(const char *filename, int* data, int maxsize){
   FILE *file = fopen(filename, "r");
   if (file == NULL){
     printf("file tidak ditemukan: %s\n", filename);
@@ -248,7 +250,7 @@ void handleNumericSorting(){
     return;
   }
 
-  int count = readDataFromFile("data_angka.txt", data, MAXSIZE);
+  int count = readNumFromFile("data_angka.txt", data, MAXSIZE);
   if(count == -1){
     free(data);
     return;
@@ -274,4 +276,219 @@ void handleNumericSorting(){
   printf("Waktu eksekusi: %.6f detik\n", duration);
   printMemoryUsage();
   free(data);
+}
+
+/* WORDS SORTING */
+void random_word(char *word, int length) {
+    static const char charset[] = "abcdefghijklmnopqrstuvwxyz"; 
+    for (int i = 0; i < length; i++) {
+        int key = rand() % (int)(sizeof(charset) - 1);
+        word[i] = charset[key];
+    }
+    word[length] = '\0';
+}
+
+// Generate Randow Words
+void generate_random_words(const char *filename, int count, int max_word_length) {
+    FILE *fp = fopen(filename, "w");
+    if (!fp) {
+        perror("File tidak dapat dibuka");
+        return;
+    }
+
+    srand(time(NULL));
+
+    char word[100]; 
+    for (int i = 0; i < count; i++) {
+        int length = (rand() % (max_word_length - 3)) + 3; // panjang kata minimal 3
+        random_word(word, length);
+        fprintf(fp, "%s\n", word);
+    }
+
+    fclose(fp);
+}
+
+// Read Word from Text File
+int readWordFromFile(const char* filename, char** data, int maxsize){
+    FILE* file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("File tidak ditemukan: %s\n", filename);
+        return -1;
+    }
+
+    int count = 0;
+    char buffer[100];
+
+    while (fgets(buffer, sizeof(buffer), file) != NULL && count < maxsize) {
+        buffer[strcspn(buffer, "\n")] = 0; // hapus newline
+        data[count] = malloc(strlen(buffer) + 1);
+        if (data[count] != NULL)
+            strcpy(data[count], buffer);
+        count++;
+    }
+
+    fclose(file);
+    return count;
+}
+
+
+void bubbleSortString(char** arr, int n){
+    for (int i = 0; i < n-1; i++)
+        for (int j = 0; j < n-i-1; j++)
+            if (strcmp(arr[j], arr[j+1]) > 0) {
+                char* temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+}
+
+void selectionSortString(char** arr, int n){
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (strcmp(arr[j], arr[minIdx]) < 0) {
+                minIdx = j;
+            }
+        }
+        if (minIdx != i) {
+            char* temp = arr[i];
+            arr[i] = arr[minIdx];
+            arr[minIdx] = temp;
+        }
+    }
+}
+
+void insertionSortString(char** arr, int n) {
+    for (int i = 1; i < n; i++) {
+        char* key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && strcmp(arr[j], key) > 0) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void mergeString(char** arr, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    char** L = malloc(n1 * sizeof(char*));
+    char** R = malloc(n2 * sizeof(char*));
+
+    for (int i = 0; i < n1; i++) L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (strcmp(L[i], R[j]) <= 0) arr[k++] = L[i++];
+        else arr[k++] = R[j++];
+    }
+
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+
+    free(L);
+    free(R);
+}
+
+void mergeSortString(char** arr, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        mergeSortString(arr, left, mid);
+        mergeSortString(arr, mid + 1, right);
+        mergeString(arr, left, mid, right);
+    }
+}
+
+// Quick Sort Helpers
+int partitionString(char** arr, int low, int high) {
+    char* pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (strcmp(arr[j], pivot) < 0) {
+            i++;
+            char* temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    char* temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}
+
+void quickSortString(char** arr, int low, int high) {
+    if (low < high) {
+        int pi = partitionString(arr, low, high);
+        quickSortString(arr, low, pi - 1);
+        quickSortString(arr, pi + 1, high);
+    }
+}
+
+void handleStringSorting(){
+    char** data = malloc(sizeof(char*) * MAXSIZE);
+    if(data == NULL){
+      printf("Gagal alokasi memori untuk array pointer\n");
+      return;
+    }
+    
+    int rows;
+    printf("Masukkan jumlah baris data kata: ");
+    
+    if (scanf("%d", &rows) != 1) {
+        printf("Input tidak valid!\n");
+        while (getchar() != '\n'); // bersihkan buffer
+        free(data);
+        return;
+    }
+    while (getchar() != '\n'); // flush sisa input
+    printf("Rows: %d\n", rows);
+
+    generate_random_words("data_kata.txt", rows, 20);
+    printf("Generate random words done\n");
+
+    int count = readWordFromFile("data_kata.txt", data, MAXSIZE);
+    if (count == -1){
+      free(data);
+      return;
+    }
+
+    printf("\nPilih metode Sorting\n");
+    printf("(1) Bubble Sort\n(2) Selection Sort\n(3) Insertion Sort\n(4) Merge Sort\n(5)Quick Sort\n");
+    int method;
+    printf("Pilihan: ");
+    scanf("%d", &method);
+    while (getchar() != '\n'); // flush
+
+    clock_t start = clock();
+
+    switch (method) {
+        case 1: bubbleSortString(data, count); break;
+        case 2: selectionSortString(data, count); break;
+        case 3: insertionSortString(data, count); break;
+        case 4: mergeSortString(data, 0, count - 1); break;
+        case 5: quickSortString(data, 0, count - 1); break;
+        default:
+            printf("Metode tidak valid\n");
+            return;
+    }
+
+    clock_t end = clock();
+    double durasi = (double)(end - start) / CLOCKS_PER_SEC;
+
+    printf("\nHasil sorting (10 pertama):\n");
+    for (int i = 0; i < count; i++) {
+        printf("%s\n", data[i]);
+    }
+    printf("Total data yang disorting: %d\n", count);
+    printf("Waktu eksekusi: %.6f detik\n", durasi);
+    printMemoryUsage();
+
+    for (int i = 0; i < count; i++) {
+        free(data[i]);
+    }
 }
