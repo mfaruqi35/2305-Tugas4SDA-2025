@@ -5,7 +5,6 @@
 
 ### Penjelasan Code
 
-File `generate_nums.c` digunakan untuk membuat teks file yang berisi 2.000.000 angka random.
-File `generate_words.c` digunakan untuk membuat teks file yang berisi 2.000.000 kata random dengan panjang kata minimal 3 huruf
+File `generate_data.c` digunakan untuk membuat teks file yang berisi 2.000.000 angka random dan teks file yang berisi 2.000.000 kata random dengan panjang kata minimal 3 huruf.
 
-Compile dengan gcc main.c functions.c header.h -o main -lpsapi
+Compile dengan `gcc main.c functions.c header.h -o main -lpsapi`
