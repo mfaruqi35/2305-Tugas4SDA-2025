@@ -12,16 +12,23 @@ int main(){
     printf("Masukkan pilihanmu: ");
     scanf("%d", &choice);
 
+    // Opsi satu untuk sorting data angka
         if (choice == 1){
             handleNumericSorting();
         }
+
+    // Opsi dua untuk sorting data kata
         else if(choice == 2){
             handleStringSorting();
         }
+
+    // Opsi tiga untuk keluar program
         else if(choice == 3){
             printf("Terima kasih sudah menggunakan program ini\n");
             break;
         }
+
+    // Handling opsi invalid
         else {
             printf("Input invalid\n");
         }

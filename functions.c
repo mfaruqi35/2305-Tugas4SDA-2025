@@ -213,6 +213,21 @@ void quickSort(int array[], int low, int high) {
   }
 }
 
+// Shell sort
+void shellSort(int array[], int n) {
+  // Rearrange elements at each n/2, n/4, n/8, ... intervals
+  for (int interval = n / 2; interval > 0; interval /= 2) {
+    for (int i = interval; i < n; i += 1) {
+      int temp = array[i];
+      int j;
+      for (j = i; j >= interval && array[j - interval] > temp; j -= interval) {
+        array[j] = array[j - interval];
+      }
+      array[j] = temp;
+    }
+  }
+}
+
 // Print Array
 void printArray(int array[], int size) {
   for (int i = 0; i < size; i++) {
@@ -239,7 +254,7 @@ void handleNumericSorting(){
   generate_random_numbers("data_angka.txt", rows, MAXSIZE);
 
   printf("\nPilih metode sorting:\n");
-  printf("(1) Bubble Sort\n(2) Selection Sort\n(3) Insertion Sort\n(4) Merge Sort\n(5)Quick Sort\n");
+  printf("(1) Bubble Sort\n(2) Selection Sort\n(3) Insertion Sort\n(4) Merge Sort\n(5) Quick Sort\n(6) Shell Sort\n");
   int method;
   printf("Pilihan: ");
   scanf("%d", &method);
@@ -263,6 +278,7 @@ void handleNumericSorting(){
     case 3: insertionSort(data, count); break;
     case 4: mergeSort(data, 0, count - 1); break;
     case 5: quickSort(data, 0, count - 1); break;
+    case 6: shellSort(data, count); break;
     default:
         printf("Metode tidak valid\n");
         free(data);
